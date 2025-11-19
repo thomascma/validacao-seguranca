@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -34,7 +35,8 @@ public class TokenUtil {
 				.perform(post("/oauth2/token")
 						.params(params)
 						.with(httpBasic(clientId, clientSecret))
-						.accept("application/json;charset=UTF-8"))
+						.accept("application/json;charset=UTF-8")
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 						.andExpect(status().isOk())
 						.andExpect(content().contentType("application/json;charset=UTF-8"));
 
