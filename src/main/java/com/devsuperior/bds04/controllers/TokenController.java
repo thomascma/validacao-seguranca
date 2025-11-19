@@ -16,6 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -82,7 +84,9 @@ public class TokenController {
 				.claim("authorities", authorities)
 				.build();
 
-		String tokenValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+		JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+		JwtEncoderParameters parameters = JwtEncoderParameters.from(jwsHeader, claims);
+		String tokenValue = jwtEncoder.encode(parameters).getTokenValue();
 
 		Map<String, Object> body = new HashMap<>();
 		body.put("access_token", tokenValue);
